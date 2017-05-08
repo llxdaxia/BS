@@ -49,14 +49,14 @@ public class MainActivity extends SuperActivity implements View.OnClickListener 
         int deviceColor, publishColor;
         if (currentPosition == 0) {
             deviceResId = R.drawable.ic_select_device;
-            deviceColor = R.color.blue_light;
+            deviceColor = R.color.blueLight;
             publishResId = R.drawable.ic_unselect_publish;
             publishColor = R.color.gray;
         } else {
             deviceResId = R.drawable.ic_unselect_device;
             deviceColor = R.color.gray;
             publishResId = R.drawable.ic_select_publish;
-            publishColor = R.color.blue_light;
+            publishColor = R.color.blueLight;
         }
         mDeviceIcon.setImageResource(deviceResId);
         mPublishIcon.setImageResource(publishResId);
