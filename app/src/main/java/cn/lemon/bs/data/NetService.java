@@ -1,5 +1,8 @@
 package cn.lemon.bs.data;
 
+import cn.lemon.bs.data.bean.Business;
+import cn.lemon.bs.data.bean.Device;
+import cn.lemon.bs.data.bean.Notice;
 import okhttp3.MultipartBody;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -25,4 +28,20 @@ public interface NetService {
     @Multipart
     @POST("addDevice.php")
     Observable<ResponseStatus> addDevice(@Part("name") String name, @Part("intro") String intro, @Part("status") int status, @Part MultipartBody.Part image);
+
+    @POST("businessList.php")
+    @FormUrlEncoded
+    Observable<Business[]> getPageBusinessList(@Field("page") int page);
+
+    @POST("communityServiceList.php")
+    @FormUrlEncoded
+    Observable<Device[]> getCommunityServiceList(@Field("page") int page);
+
+    @POST("noticeList.php")
+    @FormUrlEncoded
+    Observable<Notice[]> getNoticeList(@Field("page") int page);
+
+    @POST("book.php")
+    @FormUrlEncoded
+    Observable<ResponseStatus> book(@Field("id") int id,@Field("phoneNum") String phoneNum);
 }

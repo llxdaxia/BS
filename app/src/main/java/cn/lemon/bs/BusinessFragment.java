@@ -1,34 +1,39 @@
 package cn.lemon.bs;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
-import cn.lemon.bs.data.bean.Device;
+import cn.alien95.util.Utils;
 import cn.lemon.bs.data.DataModel;
+import cn.lemon.bs.data.bean.Business;
 import cn.lemon.common.base.fragment.SuperFragment;
 import cn.lemon.common.net.ServiceResponse;
 import cn.lemon.view.RefreshRecyclerView;
 import cn.lemon.view.adapter.Action;
 
 
-@SuppressLint("ValidFragment")
-public class DeviceFragment extends SuperFragment {
+public class BusinessFragment extends SuperFragment {
 
     private RefreshRecyclerView mRecyclerView;
-    private DeviceAdapter mAdapter;
+    private BusinessAdapter mAdapter;
     private int page = 0;
 
-    @SuppressLint("ValidFragment")
-    public DeviceFragment() {
-        super(R.layout.fragment_device, true);
+    public BusinessFragment(){
+        super(R.layout.fragment_business,true);
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mAdapter = new BusinessAdapter(getContext());
+        getData(0);
+    }
+
+    @Override
+    public void onClickErrorLoadData(View v) {
+        super.onClickErrorLoadData(v);
         getData(0);
     }
 
@@ -37,7 +42,7 @@ public class DeviceFragment extends SuperFragment {
         super.onInitialView();
         mRecyclerView = (RefreshRecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecyclerView.setAdapter(mAdapter = new DeviceAdapter(getContext()));
+        mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setRefreshAction(new Action() {
             @Override
             public void onAction() {
@@ -53,29 +58,24 @@ public class DeviceFragment extends SuperFragment {
         });
     }
 
-    @Override
-    public void onClickErrorLoadData(View v) {
-        super.onClickErrorLoadData(v);
-        getData(0);
-    }
-
-    public void getData(final int page) {
-        DataModel.getInstance().getPageDeviceList(page, new ServiceResponse<Device[]>() {
+    public void getData(final int page){
+        DataModel.getInstance().getPageBusinessList(page, new ServiceResponse<Business[]>() {
             @Override
-            public void onNext(Device[] devices) {
-                super.onNext(devices);
+            public void onNext(Business[] data) {
+                super.onNext(data);
+                Utils.Log("businessfragment : onNext " + data.length);
                 showContent();
                 if (page == 0) {
                     mAdapter.clear();
-                    if (devices.length == 0) {
+                    if (data.length == 0) {
                         showEmpty();
                     }
-                    mAdapter.addAll(devices);
+                    mAdapter.addAll(data);
                     mRecyclerView.dismissSwipeRefresh();
                 } else {
-                    mAdapter.addAll(devices);
+                    mAdapter.addAll(data);
                 }
-                if (devices.length < 10) {
+                if (data.length < 10) {
                     mAdapter.showNoMore();
                 }
             }
@@ -83,8 +83,10 @@ public class DeviceFragment extends SuperFragment {
             @Override
             public void onError(Throwable e) {
                 super.onError(e);
+                Utils.Log("businessfragment : onError " + e.getMessage());
                 showError();
             }
         });
     }
+
 }

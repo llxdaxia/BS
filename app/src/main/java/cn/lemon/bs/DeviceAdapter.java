@@ -15,8 +15,8 @@ import android.widget.TextView;
 
 import cn.alien95.resthttp.view.HttpImageView;
 import cn.alien95.util.Utils;
-import cn.lemon.bs.data.Device;
-import cn.lemon.bs.data.DeviceModel;
+import cn.lemon.bs.data.bean.Device;
+import cn.lemon.bs.data.DataModel;
 import cn.lemon.bs.data.ResponseStatus;
 import cn.lemon.common.net.ServiceResponse;
 import cn.lemon.view.adapter.BaseViewHolder;
@@ -34,17 +34,17 @@ public class DeviceAdapter extends RecyclerAdapter<Device> {
 
     @Override
     public BaseViewHolder<Device> onCreateBaseViewHolder(ViewGroup parent, int viewType) {
-        return new DeviceViewHolder(parent, R.layout.holder_device);
+        return new DeviceViewHolder(parent);
     }
 
-    class DeviceViewHolder extends BaseViewHolder<Device> {
+    public static class DeviceViewHolder extends BaseViewHolder<Device> {
 
         private HttpImageView imageView;
         private TextView name, status, intro;
         private Button modifyStatus;
 
-        public DeviceViewHolder(ViewGroup parent, int layoutId) {
-            super(parent, layoutId);
+        public DeviceViewHolder(ViewGroup parent) {
+            super(parent, R.layout.holder_device);
         }
 
         @Override
@@ -67,16 +67,17 @@ public class DeviceAdapter extends RecyclerAdapter<Device> {
             modifyStatus.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showModifyStatus(v,data);
+                    showModifyStatus(v, data);
                 }
             });
         }
-        public void setStatusText(int s){
-            if(s == 0){
+
+        public void setStatusText(int s) {
+            if (s == 0) {
                 status.setText("正常");
-            }else if(s == 1){
+            } else if (s == 1) {
                 status.setText("故障");
-            }else {
+            } else {
                 status.setText("修复中");
             }
         }
@@ -114,7 +115,7 @@ public class DeviceAdapter extends RecyclerAdapter<Device> {
             radioGroup.addView(radioTrouble);
             radioGroup.addView(radioFix);
             radioNormal.setChecked(true);
-            switch (device.status){
+            switch (device.status) {
                 case 0:
                     radioNormal.setChecked(true);
                     break;
@@ -153,12 +154,12 @@ public class DeviceAdapter extends RecyclerAdapter<Device> {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(device.status == tempStatus){
+                    if (device.status == tempStatus) {
                         alertDialog.dismiss();
                         return;
                     }
-                    DeviceModel.getInstance().updateStatus(device.id,device.status,
-                            new ServiceResponse<ResponseStatus>(){
+                    DataModel.getInstance().updateStatus(device.id, device.status,
+                            new ServiceResponse<ResponseStatus>() {
                                 @Override
                                 public void onNext(ResponseStatus responseStatus) {
                                     super.onNext(responseStatus);

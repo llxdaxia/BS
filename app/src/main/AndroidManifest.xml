@@ -28,6 +28,8 @@
             android:label="图片选择"
             android:screenOrientation="portrait" />
 
+        <activity android:name=".PayActivity"
+            android:label="缴费详情"/>
     </application>
 
 </manifest>

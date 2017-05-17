@@ -17,7 +17,7 @@ import java.util.List;
 
 import cn.alien95.util.ImageUtil;
 import cn.alien95.util.Utils;
-import cn.lemon.bs.data.DeviceModel;
+import cn.lemon.bs.data.DataModel;
 import cn.lemon.bs.data.ResponseStatus;
 import cn.lemon.common.base.fragment.SuperFragment;
 import cn.lemon.common.net.ServiceResponse;
@@ -93,7 +93,7 @@ public class PublishFragment extends SuperFragment implements View.OnClickListen
             Utils.Toast("请选择图片");
             return;
         }
-        DeviceModel.getInstance().addDevice(nameStr,introStr,status,mFile,new ServiceResponse<ResponseStatus>(){
+        DataModel.getInstance().addDevice(nameStr,introStr,status,mFile,new ServiceResponse<ResponseStatus>(){
             @Override
             public void onNext(ResponseStatus responseStatus) {
                 super.onNext(responseStatus);

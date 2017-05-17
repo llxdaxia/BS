@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        tools:text="黑板" />
+
+    <TextView
+        android:id="@+id/intro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/name"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        tools:text="不一样的黑板，重邮专用" />
+
+    <cn.alien95.resthttp.view.HttpImageView
+        android:id="@+id/image"
+        android:layout_width="100dp"
+        android:layout_height="56dp"
+        android:layout_alignParentRight="true"
+        android:layout_margin="8dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.6dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/greyLight" />
+
+</RelativeLayout>

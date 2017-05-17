@@ -1,29 +1,29 @@
 package cn.lemon.bs;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
-import cn.lemon.bs.data.bean.Device;
 import cn.lemon.bs.data.DataModel;
+import cn.lemon.bs.data.bean.Notice;
 import cn.lemon.common.base.fragment.SuperFragment;
 import cn.lemon.common.net.ServiceResponse;
 import cn.lemon.view.RefreshRecyclerView;
 import cn.lemon.view.adapter.Action;
 
+/**
+ * Created by linlongxin on 2017.5.16.
+ */
 
-@SuppressLint("ValidFragment")
-public class DeviceFragment extends SuperFragment {
+public class PublicNoticeFragment extends SuperFragment {
 
     private RefreshRecyclerView mRecyclerView;
-    private DeviceAdapter mAdapter;
+    private NoticeAdapter mAdapter;
     private int page = 0;
 
-    @SuppressLint("ValidFragment")
-    public DeviceFragment() {
-        super(R.layout.fragment_device, true);
+    public PublicNoticeFragment() {
+        super(R.layout.fragment_public_notice, true);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class DeviceFragment extends SuperFragment {
         super.onInitialView();
         mRecyclerView = (RefreshRecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecyclerView.setAdapter(mAdapter = new DeviceAdapter(getContext()));
+        mRecyclerView.setAdapter(mAdapter = new NoticeAdapter(getContext()));
         mRecyclerView.setRefreshAction(new Action() {
             @Override
             public void onAction() {
@@ -60,22 +60,22 @@ public class DeviceFragment extends SuperFragment {
     }
 
     public void getData(final int page) {
-        DataModel.getInstance().getPageDeviceList(page, new ServiceResponse<Device[]>() {
+        DataModel.getInstance().getPageNoticeList(page, new ServiceResponse<Notice[]>() {
             @Override
-            public void onNext(Device[] devices) {
-                super.onNext(devices);
+            public void onNext(Notice[] notices) {
+                super.onNext(notices);
                 showContent();
                 if (page == 0) {
                     mAdapter.clear();
-                    if (devices.length == 0) {
+                    if (notices.length == 0) {
                         showEmpty();
                     }
-                    mAdapter.addAll(devices);
+                    mAdapter.addAll(notices);
                     mRecyclerView.dismissSwipeRefresh();
                 } else {
-                    mAdapter.addAll(devices);
+                    mAdapter.addAll(notices);
                 }
-                if (devices.length < 10) {
+                if (notices.length < 10) {
                     mAdapter.showNoMore();
                 }
             }

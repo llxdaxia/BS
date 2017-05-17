@@ -19,5 +19,7 @@
     <color name="green">#259b24</color>
     <color name="greenDark">#0a7e07</color>
 
+    <color name="toolbar_background">#3F51B5</color>
+
 
 </resources>

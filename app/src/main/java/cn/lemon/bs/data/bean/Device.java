@@ -1,4 +1,4 @@
-package cn.lemon.bs.data;
+package cn.lemon.bs.data.bean;
 
 /**
  * Created by linlongxin on 2017.5.5.

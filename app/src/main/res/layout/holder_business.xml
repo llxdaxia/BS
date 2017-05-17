@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <cn.alien95.resthttp.view.HttpImageView
+            android:id="@+id/image"
+            android:layout_width="120dp"
+            android:layout_height="80dp"
+            android:layout_margin="8dp" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_toRightOf="@+id/image"
+            android:textColor="@color/colorAccent"
+            android:textSize="16sp"
+            tools:text="电脑" />
+
+        <TextView
+            android:id="@+id/price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_alignRight="@+id/intro"
+            android:layout_marginRight="16dp"
+            android:textColor="@android:color/holo_red_light"
+            android:textSize="16sp"
+            tools:text="100元" />
+
+
+        <TextView
+            android:id="@+id/intro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/name"
+            android:layout_marginTop="8dp"
+            android:layout_toRightOf="@+id/image"
+            android:layout_toLeftOf="@+id/book"
+            android:maxLines="2"
+            tools:text="联想B4400联想B4400联想B4400联想B4400联想B4400联想B4400" />
+
+        <TextView
+            android:id="@+id/book"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="8dp"
+            android:text="预订"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:background="@color/gray"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="17sp" />
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>
