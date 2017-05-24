@@ -3,9 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
+    android:layout_marginTop="8dp"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -23,22 +23,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:layout_toLeftOf="@+id/layout"
             android:layout_toRightOf="@+id/image"
+            android:maxLines="1"
             android:textColor="@color/colorAccent"
             android:textSize="16sp"
             tools:text="电脑" />
-
-        <TextView
-            android:id="@+id/price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_alignRight="@+id/intro"
-            android:layout_marginRight="16dp"
-            android:textColor="@android:color/holo_red_light"
-            android:textSize="16sp"
-            tools:text="100元" />
-
 
         <TextView
             android:id="@+id/intro"
@@ -46,26 +36,58 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/name"
             android:layout_marginTop="8dp"
+            android:layout_toLeftOf="@+id/layout"
             android:layout_toRightOf="@+id/image"
-            android:layout_toLeftOf="@+id/book"
             android:maxLines="2"
             tools:text="联想B4400联想B4400联想B4400联想B4400联想B4400联想B4400" />
 
-        <TextView
-            android:id="@+id/book"
+        <LinearLayout
+            android:id="@+id/layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="8dp"
-            android:text="预订"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp"
-            android:background="@color/gray"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="17sp" />
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignRight="@+id/intro"
+                android:textColor="@android:color/holo_red_light"
+                android:textSize="16sp"
+                tools:text="100元" />
+
+            <TextView
+                android:id="@+id/book"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:background="@color/gray"
+                android:paddingBottom="2dp"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:paddingTop="2dp"
+                android:text="预订"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:id="@+id/pay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:background="@color/gray"
+                android:paddingBottom="2dp"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:paddingTop="2dp"
+                android:text="购买"
+                android:textColor="@android:color/white" />
+
+        </LinearLayout>
+
 
     </RelativeLayout>
 

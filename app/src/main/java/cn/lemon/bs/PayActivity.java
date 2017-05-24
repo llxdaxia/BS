@@ -1,5 +1,6 @@
 package cn.lemon.bs;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -15,6 +16,7 @@ public class PayActivity extends ToolbarActivity {
     private Button mPay;
     private Handler mHandler;
 
+    @SuppressLint({"SetTextI18n", "DefaultLocale"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,11 +26,15 @@ public class PayActivity extends ToolbarActivity {
         mHandler = new Handler();
 
         String text = getIntent().getStringExtra(CommunityServiceFragment.PAY_TEXT);
+        int payMoney = getIntent().getIntExtra(BusinessAdapter.PAY_MONEY, -1);
 
         mMoneyNum = (TextView) $(R.id.money_num);
         mPay = (Button) $(R.id.pay);
-
-        mMoneyNum.setText("需缴纳" + text + String.format("%.2f", (Math.random() * 100)) + "元");
+        if (payMoney == -1) {
+            mMoneyNum.setText("需缴纳" + text + String.format("%.2f", (Math.random() * 100)) + "元");
+        } else {
+            mMoneyNum.setText("需缴纳 " + text + " " + payMoney + "元");
+        }
 
         mPay.setOnClickListener(new View.OnClickListener() {
             @Override

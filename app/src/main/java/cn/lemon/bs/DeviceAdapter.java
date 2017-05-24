@@ -40,7 +40,7 @@ public class DeviceAdapter extends RecyclerAdapter<Device> {
     public static class DeviceViewHolder extends BaseViewHolder<Device> {
 
         private HttpImageView imageView;
-        private TextView name, status, intro;
+        private TextView name, status, intro, phoneNum, address;
         private Button modifyStatus;
 
         public DeviceViewHolder(ViewGroup parent) {
@@ -55,6 +55,8 @@ public class DeviceAdapter extends RecyclerAdapter<Device> {
             intro = findViewById(R.id.intro);
             status = findViewById(R.id.status);
             modifyStatus = findViewById(R.id.modify_status);
+            phoneNum = findViewById(R.id.phone_num);
+            address = findViewById(R.id.address);
         }
 
         @Override
@@ -70,6 +72,8 @@ public class DeviceAdapter extends RecyclerAdapter<Device> {
                     showModifyStatus(v, data);
                 }
             });
+            phoneNum.setText("联系方式：" + data.phoneNum);
+            address.setText("家庭地址：" + data.address);
         }
 
         public void setStatusText(int s) {

@@ -11,4 +11,6 @@ public class Device {
     public String image;
     public int status; // 0  : 正常，1 : 故障，2 : 修复中
     public String intro;
+    public String phoneNum;
+    public String address;
 }

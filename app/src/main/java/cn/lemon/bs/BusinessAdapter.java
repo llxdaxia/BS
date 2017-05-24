@@ -2,6 +2,7 @@ package cn.lemon.bs;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -16,6 +17,7 @@ import cn.alien95.resthttp.view.HttpImageView;
 import cn.alien95.util.Utils;
 import cn.lemon.bs.data.DataModel;
 import cn.lemon.bs.data.ResponseStatus;
+import cn.lemon.bs.data.bean.Account;
 import cn.lemon.bs.data.bean.Business;
 import cn.lemon.common.net.ServiceResponse;
 import cn.lemon.view.adapter.BaseViewHolder;
@@ -26,6 +28,12 @@ import cn.lemon.view.adapter.RecyclerAdapter;
  */
 
 public class BusinessAdapter extends RecyclerAdapter<Business> {
+
+    public final static String PAY_MONEY = "PAY_MONEY";
+
+    private enum BuyType {
+        BOOK, PAY;
+    }
 
     public BusinessAdapter(Context context) {
         super(context);
@@ -39,7 +47,7 @@ public class BusinessAdapter extends RecyclerAdapter<Business> {
     class BusinessViewHolder extends BaseViewHolder<Business> {
 
         private HttpImageView image;
-        private TextView name, intro, price, book;
+        private TextView name, intro, price, book, pay;
 
         public BusinessViewHolder(ViewGroup parent) {
             super(parent, R.layout.holder_business);
@@ -53,6 +61,7 @@ public class BusinessAdapter extends RecyclerAdapter<Business> {
             intro = findViewById(R.id.intro);
             price = findViewById(R.id.price);
             book = findViewById(R.id.book);
+            pay = findViewById(R.id.pay);
         }
 
         @Override
@@ -66,12 +75,30 @@ public class BusinessAdapter extends RecyclerAdapter<Business> {
             book.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showBuyDialog(v, data);
+                    if (DataModel.getInstance().getAccount() == null) {
+                        completeInfo(v, data, BuyType.BOOK);
+                    } else {
+                        book.setText("已预订");
+                        Utils.Toast("预订成功，请到指定地点自取");
+                    }
+                }
+            });
+            pay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (DataModel.getInstance().getAccount() == null) {
+                        completeInfo(v, data, BuyType.PAY);
+                    } else {
+                        Intent intent = new Intent(v.getContext(), PayActivity.class);
+                        intent.putExtra(CommunityServiceFragment.PAY_TEXT, data.name);
+                        intent.putExtra(PAY_MONEY, data.price);
+                        v.getContext().startActivity(intent);
+                    }
                 }
             });
         }
 
-        public void showBuyDialog(View v, final Business data) {
+        public void completeInfo(View v, final Business data, final BuyType type) {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
 
@@ -84,15 +111,22 @@ public class BusinessAdapter extends RecyclerAdapter<Business> {
             title.setTextColor(v.getContext().getResources().getColor(R.color.colorPrimary));
             title.setTextSize(18);
             title.setPadding(Utils.dip2px(16), Utils.dip2px(16), Utils.dip2px(16), Utils.dip2px(8));
-            title.setText("请输入您的电话");
+            title.setText("请填写电话和地址");
             linearLayout.addView(title);
 
-            final EditText editText = new EditText(v.getContext());
+            final EditText phoneText = new EditText(v.getContext());
             final LinearLayout.LayoutParams editParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             editParams.setMargins(Utils.dip2px(16), 0, Utils.dip2px(16), 0);
-            editText.setLayoutParams(editParams);
-            editText.setHint("电话");
-            linearLayout.addView(editText);
+            phoneText.setLayoutParams(editParams);
+            phoneText.setHint("电话");
+            linearLayout.addView(phoneText);
+
+            final EditText addressText = new EditText(v.getContext());
+            final LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            layoutParams.setMargins(Utils.dip2px(16), 0, Utils.dip2px(16), 0);
+            addressText.setLayoutParams(layoutParams);
+            addressText.setHint("地址");
+            linearLayout.addView(addressText);
 
             Button button = new Button(v.getContext());
             button.setText("确定");
@@ -108,27 +142,38 @@ public class BusinessAdapter extends RecyclerAdapter<Business> {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
-                    if (TextUtils.isEmpty(editText.getText())) {
-                        Utils.Toast("不能为空");
+                    String phoneNum = phoneText.getText().toString();
+                    String address = addressText.getText().toString();
+                    if (TextUtils.isEmpty(phoneNum) || TextUtils.isEmpty(address)) {
+                        Utils.Toast("内容不能为空");
                         return;
                     }
-                    DataModel.getInstance().book(data.id, editText.getText().toString(), new ServiceResponse<ResponseStatus>() {
-                        @Override
-                        public void onNext(ResponseStatus responseStatus) {
-                            super.onNext(responseStatus);
-                            Utils.Toast("预定成功");
-                            alertDialog.dismiss();
-                        }
+                    DataModel.getInstance().saveAccount(new Account(phoneNum, address));
+                    if (type == BuyType.BOOK) {
 
-                        @Override
-                        public void onError(Throwable e) {
-                            super.onError(e);
-                            Utils.Toast("预定失败");
-                            alertDialog.dismiss();
-                        }
-                    });
+                        DataModel.getInstance().book(data.id, phoneText.getText().toString(), new ServiceResponse<ResponseStatus>() {
+                            @Override
+                            public void onNext(ResponseStatus responseStatus) {
+                                super.onNext(responseStatus);
+                                Utils.Toast("预订成功，请到指定地点自取");
+                                alertDialog.dismiss();
+                                book.setText("已预订");
+                            }
 
-
+                            @Override
+                            public void onError(Throwable e) {
+                                super.onError(e);
+                                Utils.Toast("预定失败");
+                                alertDialog.dismiss();
+                            }
+                        });
+                    } else {
+                        alertDialog.dismiss();
+                        Intent intent = new Intent(v.getContext(), PayActivity.class);
+                        intent.putExtra(CommunityServiceFragment.PAY_TEXT, data.name);
+                        intent.putExtra(PAY_MONEY, data.price);
+                        v.getContext().startActivity(intent);
+                    }
                 }
             });
         }

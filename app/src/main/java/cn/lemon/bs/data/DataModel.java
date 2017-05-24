@@ -1,7 +1,10 @@
 package cn.lemon.bs.data;
 
 import java.io.File;
+import java.io.IOException;
 
+import cn.alien95.util.Utils;
+import cn.lemon.bs.data.bean.Account;
 import cn.lemon.bs.data.bean.Business;
 import cn.lemon.bs.data.bean.Device;
 import cn.lemon.bs.data.bean.Notice;
@@ -18,8 +21,42 @@ import okhttp3.RequestBody;
 
 public class DataModel extends SuperModel {
 
+    private Account mAccount;
+    private static String ACCOUNT_FILE;
+
+    public DataModel(){
+        ACCOUNT_FILE = Utils.getContext().getFilesDir().getPath() + File.separator + "ACOUNT";
+    }
+
     public static DataModel getInstance() {
         return getInstance(DataModel.class);
+    }
+
+    public Account getAccount() {
+        if (mAccount == null) {
+            File accountFile = new File(ACCOUNT_FILE);
+            mAccount = (Account) Utils.readObjectFromFile(accountFile);
+        }
+        return mAccount;
+    }
+
+    public void deleteAccount(){
+        File accountFile = new File(ACCOUNT_FILE);
+        accountFile.delete();
+        mAccount = null;
+    }
+
+    public void saveAccount(Account account) {
+        mAccount = account;
+        File accountFile = new File(ACCOUNT_FILE);
+        if (!accountFile.exists()) {
+            try {
+                accountFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        Utils.writeObjectToFile(account, accountFile);
     }
 
     public void getPageDeviceList(int page, ServiceResponse<Device[]> response) {
